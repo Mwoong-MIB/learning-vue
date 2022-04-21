@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <app-header v-bind:propsdata="num"></app-header>
+        <app-content v-on:pass="deliverNum"></app-content>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        var appHeader = {
+            template: '<div>header {{ propsdata }}</div>',
+            props: ['propsdata']
+        }
+        
+        var appContent = {
+            template: '<div>content <button v-on:click="passNum">pass</button></div>',
+            methods: {
+                passNum: function() {
+                    this.$emit('pass', 10);
+                }
+            }
+        }
+        
+        new Vue({
+            el: '#app',
+            components: {
+                'app-header': appHeader,
+                'app-content': appContent
+            },
+            data: {
+                num: 0
+            },
+            methods: {
+                // v-on에서 암묵적으로 value 인자로 넘어오게 됨.
+                //<app-content v-on:pass="deliverNum(value)"></app-content> 와 같은 효과.
+                deliverNum: function(value){
+                    this.num = value;
+                    //this는 VUE 객체를 가르키지만, vue 프레임웤이 바로 data안의 num을 바라볼 수 있게 해줌.
+                }
+            }
+
+        })
+    </script>
+</body>
+</html>
